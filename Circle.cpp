@@ -17,11 +17,26 @@ Circle::Circle(vec2 center, GLfloat radius, int points_num, GLuint program,
 	points = new vec2[pointsNum];
 	//color of the circle
 	colors = new vec4[pointsNum];
-	for (int i = 0; i < points_num; i++) {
+	if(points_num==30){
+	for (int i = 0; i < points_num/2; i++) {
 		double angle = 360.0 / points_num * i;
 		double rad = angle / 180.0 * 3.1415;
 		points[i] = center + vec2(radius * cos(rad), radius * sin(rad));
 		colors[i] = vec4(color.x, color.y, color.z, 1);
+	}
+	for (int i =  points_num/2; i < points_num; i++) {
+			double angle = 360.0 / points_num * i;
+			double rad = angle / 180.0 * 3.1415;
+			points[i] = center + vec2(radius * cos(rad), radius * sin(rad));
+			colors[i] = vec4(0, 0, 0, 1);
+		}
+	}else{
+		for (int i = 0; i < points_num; i++) {
+				double angle = 360.0 / points_num * i;
+				double rad = angle / 180.0 * 3.1415;
+				points[i] = center + vec2(radius * cos(rad), radius * sin(rad));
+				colors[i] = vec4(color.x, color.y, color.z, 1);
+			}
 	}
 	// Create a vertex array object
 	glGenVertexArrays(1, &vao);
@@ -58,8 +73,20 @@ Circle::Circle(vec2 center, GLfloat radius, int points_num, GLuint program,
 void Circle::change_color(vec4 color) {
     //change color of the circle points
 	colors = new vec4[pointsNum];
-	for (int i = 0; i < pointsNum; i++) {
+	if(pointsNum==30){
+	for (int i = 0; i < pointsNum/2; i++) {
+
 		colors[i] = vec4(color.x, color.y, color.z, 1);
+	}
+	for (int i =  pointsNum/2; i < pointsNum; i++) {
+
+			colors[i] = vec4(0, 0, 0, 1);
+		}
+	}else{
+		for (int i = 0; i < pointsNum; i++) {
+
+				colors[i] = vec4(color.x, color.y, color.z, 1);
+			}
 	}
     //bind vao
 	glBindVertexArray(vao);
@@ -80,6 +107,7 @@ void Circle::change_color(vec4 color) {
 
 }
 void Circle::render() {
+//	glUseProgram(gl_program);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, pointsNum);
 
